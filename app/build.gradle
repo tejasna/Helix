@@ -63,7 +63,7 @@ dependencies {
   // Android Testing Support Library's runner and rules
   androidTestCompile "com.android.support.test:runner:$rootProject.ext.runnerVersion"
   androidTestCompile "com.android.support.test:rules:$rootProject.ext.runnerVersion"
+
   compile 'com.android.support:support-v4:25.3.1'
   provided 'org.glassfish:javax.annotation:10.0-b28'
-
 }

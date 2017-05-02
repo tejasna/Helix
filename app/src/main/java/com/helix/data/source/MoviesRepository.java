@@ -24,6 +24,10 @@ import javax.inject.Inject;
     localDataSource = tasksLocalDataSource;
   }
 
+  @Override public void clearSubscriptions() {
+    remoteDataSource.clearSubscriptions();
+  }
+
   //@Override public void login(@NonNull LoginCallback callback) {
   //
   //  localDataSource.checkLoginState(new LoginCallback() {

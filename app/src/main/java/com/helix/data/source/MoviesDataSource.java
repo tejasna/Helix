@@ -17,42 +17,42 @@ public interface MoviesDataSource {
 
     void onMoviesSaveFailed();
   }
-}
 
-//  void login(@NonNull LoginCallback callback);
-//
-//  void checkLoginState(@NonNull LoginCallback callback);
-//
-//  void saveLoginState(@NonNull Login login);
-//
-//
-//  void getTransactions(@NonNull LoadTransactionsCallback callback);
-//
-//  void saveTransactions(@NonNull List<Transaction> transactions);
-//
-//  void newTransaction(@NonNull Transaction transaction, SaveTransactionCallback callback);
-//
-//  void getBalance(@NonNull LoadBalanceCallback callback);
-//
-//  void saveBalance(@NonNull Balance balance);
-//
-//  void getCurrencies(@NonNull LoadCurrenciesCallback callback);
-//
-//  void saveCurrencies(@NonNull List<Currency> currencies);
-//
-//  void getPreferredCurrency(@NonNull LoadCurrenciesCallback callback);
-//
-//  void savePreferredCurrency(@NonNull Currency currency);
-//
-//  void isBalanceGreaterThan(@NonNull BalanceAvailabilityCallback callback, double amount);
-//
-//  void refreshTransactions();
-//
-//  void deleteAllTransactions();
-//
-//  void deleteExistingBalance();
-//
-//  void clearSubscriptions();
-//
-//  void logout();
-//}
+  //  void login(@NonNull LoginCallback callback);
+  //
+  //  void checkLoginState(@NonNull LoginCallback callback);
+  //
+  //  void saveLoginState(@NonNull Login login);
+  //
+  //
+  //  void getTransactions(@NonNull LoadTransactionsCallback callback);
+  //
+  //  void saveTransactions(@NonNull List<Transaction> transactions);
+  //
+  //  void newTransaction(@NonNull Transaction transaction, SaveTransactionCallback callback);
+  //
+  //  void getBalance(@NonNull LoadBalanceCallback callback);
+  //
+  //  void saveBalance(@NonNull Balance balance);
+  //
+  //  void getCurrencies(@NonNull LoadCurrenciesCallback callback);
+  //
+  //  void saveCurrencies(@NonNull List<Currency> currencies);
+  //
+  //  void getPreferredCurrency(@NonNull LoadCurrenciesCallback callback);
+  //
+  //  void savePreferredCurrency(@NonNull Currency currency);
+  //
+  //  void isBalanceGreaterThan(@NonNull BalanceAvailabilityCallback callback, double amount);
+  //
+  //  void refreshTransactions();
+  //
+  //  void deleteAllTransactions();
+  //
+  //  void deleteExistingBalance();
+  //
+  void clearSubscriptions();
+  //
+  //  void logout();
+  //}
+}

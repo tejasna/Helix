@@ -14,6 +14,10 @@ import static com.helix.utils.PreConditions.checkNotNull;
     checkNotNull(context);
   }
 
+  @Override public void clearSubscriptions() {
+
+  }
+
   //@Override public void checkLoginState(@NonNull LoginCallback callback) {
   //  Realm.getDefaultInstance().executeTransaction(realm -> {
   //    Login login = realm.where(Login.class).findFirst();

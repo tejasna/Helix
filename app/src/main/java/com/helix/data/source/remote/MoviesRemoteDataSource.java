@@ -22,6 +22,10 @@ import static com.helix.utils.PreConditions.checkNotNull;
     compositeSubscription = new CompositeDisposable();
   }
 
+  @Override public void clearSubscriptions() {
+    compositeSubscription.clear();
+  }
+
   //@Override public void login(final @NonNull LoginCallback callback) {
   //  compositeSubscription.add(restApi.login()
   //      .subscribeOn(Schedulers.io())
