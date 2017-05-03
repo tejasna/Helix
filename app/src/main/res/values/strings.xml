@@ -1,6 +1,8 @@
 <resources>
   <string name="app_name">Helix</string>
+  <string name="upcoming">Upcoming</string>
+  <string name="upcoming_empty">No movies found</string>
+  <string name="upcoming_error">Could not retrieve movies</string>
+  <string name="exception_no_view_type_found">No view type found</string>
 
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

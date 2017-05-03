@@ -2,7 +2,7 @@ package com.helix.upcoming;
 
 import com.helix.BasePresenter;
 import com.helix.BaseView;
-import com.helix.data.Upcoming;
+import com.helix.data.Movie;
 import java.util.List;
 
 class UpcomingContract {
@@ -11,7 +11,7 @@ class UpcomingContract {
 
     void setLoadingIndicator(boolean active);
 
-    void showMovies(List<Upcoming> transactions);
+    void showMovies(List<Movie> movies);
 
     void showNoMovies();
 
@@ -23,5 +23,7 @@ class UpcomingContract {
   interface Presenter extends BasePresenter {
 
     void loadMovies(boolean forceUpdate);
+
+    void loadMore(int page);
   }
 }

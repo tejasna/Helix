@@ -23,6 +23,10 @@ android {
   packagingOptions {
     exclude 'META-INF/rxjava.properties'
   }
+  compileOptions {
+    targetCompatibility 1.8
+    sourceCompatibility 1.8
+  }
 }
 
 dependencies {
@@ -32,6 +36,7 @@ dependencies {
   compile "com.android.support:design:$rootProject.supportLibraryVersion"
   compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
   compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+  compile "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
   compile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
   androidTestCompile "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
   testCompile "junit:junit:$rootProject.ext.junitVersion"
@@ -45,12 +50,15 @@ dependencies {
   //Bindings
   compile "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
   compile "com.jakewharton.timber:timber:$rootProject.timberVersion"
-  compile "com.jakewharton.rxbinding2:rxbinding:$rootProject.rxBindingVersion"
+  compile "com.jakewharton.rxbinding2:rxbinding:$rootProject.rxBinding2Version"
   apt "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
 
   //RxJava
-  compile "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
-  compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxBindingVersion"
+  compile "io.reactivex.rxjava2:rxjava:$rootProject.rxJava2Version"
+  compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxBinding2Version"
+  compile "io.reactivex:rxjava:$rootProject.rxJava1Version"
+  compile "io.reactivex:rxandroid:$rootProject.rxBinding1Version"
+
 
   //Network
   compile("com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion")
@@ -59,6 +67,7 @@ dependencies {
   compile "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpVersion"
   compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:$rootProject.picassoOkHttpVersion"
 
+  compile "joda-time:joda-time:$rootProject.jodaTimeVersion"
 
   // Android Testing Support Library's runner and rules
   androidTestCompile "com.android.support.test:runner:$rootProject.ext.runnerVersion"

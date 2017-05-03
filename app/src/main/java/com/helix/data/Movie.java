@@ -2,26 +2,30 @@ package com.helix.data;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
-import java.util.List;
 
 @RealmClass public class Movie extends RealmObject {
 
+  @PrimaryKey @SerializedName("id") @Expose public int id;
   @SerializedName("poster_path") @Expose public String posterPath;
   @SerializedName("adult") @Expose public Boolean adult;
   @SerializedName("overview") @Expose public String overview;
   @SerializedName("release_date") @Expose public String releaseDate;
-  @SerializedName("genre_ids") @Expose public List<Integer> genreIds = null;
-  @SerializedName("id") @Expose public Integer id;
+  @SerializedName("genre_ids") @Expose public RealmList<RealmInt> genreIds;
   @SerializedName("original_title") @Expose public String originalTitle;
   @SerializedName("original_language") @Expose public String originalLanguage;
   @SerializedName("title") @Expose public String title;
   @SerializedName("backdrop_path") @Expose public String backdropPath;
   @SerializedName("popularity") @Expose public Float popularity;
-  @SerializedName("vote_count") @Expose public Integer voteCount;
+  @SerializedName("vote_count") @Expose public int voteCount;
   @SerializedName("video") @Expose public Boolean video;
   @SerializedName("vote_average") @Expose public Float voteAverage;
+  public RealmList<Genre> genres;
+
+  public static final String SIZE_POSTER = "http://image.tmdb.org/t/p/w185/";
 
   public String getPosterPath() {
     return posterPath;
@@ -55,19 +59,19 @@ import java.util.List;
     this.releaseDate = releaseDate;
   }
 
-  public List<Integer> getGenreIds() {
+  public RealmList<RealmInt> getGenreIds() {
     return genreIds;
   }
 
-  public void setGenreIds(List<Integer> genreIds) {
+  public void setGenreIds(RealmList<RealmInt> genreIds) {
     this.genreIds = genreIds;
   }
 
-  public Integer getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(int id) {
     this.id = id;
   }
 
@@ -111,11 +115,11 @@ import java.util.List;
     this.popularity = popularity;
   }
 
-  public Integer getVoteCount() {
+  public int getVoteCount() {
     return voteCount;
   }
 
-  public void setVoteCount(Integer voteCount) {
+  public void setVoteCount(int voteCount) {
     this.voteCount = voteCount;
   }
 
@@ -133,5 +137,17 @@ import java.util.List;
 
   public void setVoteAverage(Float voteAverage) {
     this.voteAverage = voteAverage;
+  }
+
+  public String getPosterUrl() {
+    return SIZE_POSTER + this.posterPath;
+  }
+
+  public RealmList<Genre> getGenres() {
+    return genres;
+  }
+
+  public void setGenres(RealmList<Genre> genres) {
+    this.genres = genres;
   }
 }

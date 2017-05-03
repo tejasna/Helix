@@ -2,24 +2,97 @@ package com.helix.data.source.remote;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import com.helix.HelixApplication;
+import com.helix.data.Movie;
+import com.helix.data.MovieDetail;
+import com.helix.data.Upcoming;
 import com.helix.data.source.HelixApplicationScope;
 import com.helix.data.source.MoviesDataSource;
+import com.helix.data.source.MoviesRepository;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import java.util.ArrayList;
+import java.util.List;
+import timber.log.Timber;
 
 import static com.helix.utils.PreConditions.checkNotNull;
+import static io.reactivex.Observable.empty;
 
 @HelixApplicationScope public class MoviesRemoteDataSource implements MoviesDataSource {
 
-  //private final MoviesApi restApi;
+  private final MoviesApi restApi;
 
   private CompositeDisposable compositeSubscription;
 
   private Context context;
 
+  private static final String API_KEY = "b7cd3340a794e5a2f35e3abb820b497f";
+
   public MoviesRemoteDataSource(@NonNull Context context) {
     checkNotNull(context);
     this.context = context;
+    this.restApi = ((HelixApplication) this.context).getRepositoryComponent().getMoviesApi();
     compositeSubscription = new CompositeDisposable();
+  }
+
+  @SuppressWarnings("NullableProblems") @Override
+  public void getUpcomingMovies(@NonNull FetchUpcomingMoviesCallback callback, @NonNull int page) {
+
+    Upcoming upcomingMovies = new Upcoming();
+    List<MovieDetail> upcomingMovieDetailList = new ArrayList<>();
+
+    compositeSubscription.add(restApi.getUpcomingMovies(API_KEY, page)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .onErrorResumeNext(throwable -> {
+          callback.onDataNotAvailable();
+          return empty();
+        })
+        .doOnNext(upcoming -> {
+          upcomingMovies.setDates(upcoming.getDates());
+          upcomingMovies.setMovies(upcoming.getMovies());
+          upcomingMovies.setPage(upcoming.getPage());
+          upcomingMovies.setTotalPages(upcoming.getTotalPages());
+          upcomingMovies.setTotalResults(upcoming.getTotalResults());
+        })
+        .flatMapIterable(new Function<Upcoming, Iterable<Movie>>() {
+          @Override public Iterable<Movie> apply(Upcoming upcoming) throws Exception {
+            return upcoming.getMovies();
+          }
+        })
+        .subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.io())
+        .flatMap(movie -> restApi.getMovieDetail(movie.getId(), API_KEY))
+        .doOnError(throwable -> {
+          Timber.e(throwable.getMessage());
+          callback.onDataNotAvailable();
+        })
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnNext(upcomingMovieDetailList::add)
+        .doOnComplete(() -> {
+          if (upcomingMovies.getMovies() != null) {
+            callback.onMoviesLoaded(upcomingMovies, upcomingMovieDetailList);
+          }
+        })
+        .subscribe());
+  }
+
+  @Override public void saveUpcomingMovies(@NonNull Upcoming upcomingMovies) {
+
+  }
+
+  @Override public void saveUpcomingMovieDetails(@NonNull List<MovieDetail> upcomingMovieDetail) {
+
+  }
+
+  @Override public void refreshMovies() {
+    /**
+     Not required because the {@link MoviesRepository} handles the logic of refreshing the movies
+     from all the available data sources.
+     */
+
   }
 
   @Override public void clearSubscriptions() {
@@ -191,10 +264,6 @@ import static com.helix.utils.PreConditions.checkNotNull;
   //
   //}
   //
-  //private String getAuthorizer() {
-  //  String bearer = Realm.getDefaultInstance().where(Login.class).findFirst().getToken();
-  //  return authPrefix + bearer;
-  //}
   //
   //private String loadJSONFromAsset(Context context) {
   //  String json;

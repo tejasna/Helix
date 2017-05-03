@@ -10,7 +10,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
-@Module(includes = ContextModule.class) public class NetworkModule {
+@Module(includes = { ContextModule.class }) class NetworkModule {
 
   @Provides @HelixApplicationScope File cacheFile(Context context) {
     return new File(context.getCacheDir(), "okhttp_cache");
@@ -23,11 +23,7 @@ import timber.log.Timber;
   @Provides @HelixApplicationScope HttpLoggingInterceptor loggingInterceptor() {
 
     HttpLoggingInterceptor interceptor;
-    interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-      @Override public void log(String message) {
-        Timber.i(message);
-      }
-    });
+    interceptor = new HttpLoggingInterceptor(message -> Timber.i(message));
 
     interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
     return interceptor;

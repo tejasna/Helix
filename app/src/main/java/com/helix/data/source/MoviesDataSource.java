@@ -1,12 +1,15 @@
 package com.helix.data.source;
 
+import android.support.annotation.NonNull;
+import com.helix.data.MovieDetail;
+import com.helix.data.Upcoming;
 import java.util.List;
 
 public interface MoviesDataSource {
 
-  interface LoadMoviesCallback {
+  interface FetchUpcomingMoviesCallback {
 
-    void onMoviesLoaded(List<Object> transactions);
+    void onMoviesLoaded(Upcoming upcomingMovies, List<MovieDetail> upcomingMovieDetail);
 
     void onDataNotAvailable();
   }
@@ -24,10 +27,13 @@ public interface MoviesDataSource {
   //
   //  void saveLoginState(@NonNull Login login);
   //
-  //
-  //  void getTransactions(@NonNull LoadTransactionsCallback callback);
-  //
-  //  void saveTransactions(@NonNull List<Transaction> transactions);
+
+  void getUpcomingMovies(@NonNull FetchUpcomingMoviesCallback callback, @NonNull int page);
+
+  void saveUpcomingMovies(@NonNull Upcoming upcomingMovies);
+
+  void saveUpcomingMovieDetails(@NonNull List<MovieDetail> upcomingMovieDetail);
+
   //
   //  void newTransaction(@NonNull Transaction transaction, SaveTransactionCallback callback);
   //
@@ -45,7 +51,8 @@ public interface MoviesDataSource {
   //
   //  void isBalanceGreaterThan(@NonNull BalanceAvailabilityCallback callback, double amount);
   //
-  //  void refreshTransactions();
+  void refreshMovies();
+
   //
   //  void deleteAllTransactions();
   //

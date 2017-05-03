@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+  <android.support.v7.widget.CardView
+      xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/card_view"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="12dip"
+      android:foreground="?android:attr/selectableItemBackground"
+      card_view:cardBackgroundColor="@color/colorPrimaryDark"
+      card_view:cardCornerRadius="4dp"
+      card_view:cardElevation="4dip">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dip"
+        android:orientation="vertical"
+    >
+
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+
+        <View
+            android:id="@+id/poster_margin"
+            android:layout_width="0dip"
+            android:layout_height="0dip"
+            android:layout_marginStart="120dip"/>
+
+
+        <com.helix.widget.SolomonTextViewBold
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/poster_margin"
+            android:layout_marginTop="12dip"
+            android:layout_toStartOf="@+id/view_group_rating"
+            android:maxLines="2"
+            android:text="@string/app_name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/colorBlack"/>
+
+        <com.helix.widget.SolomonTextViewBold
+            android:id="@+id/genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/poster_margin"
+            android:layout_below="@+id/title"
+            android:layout_marginEnd="20dip"
+            android:layout_marginTop="4dip"
+            android:layout_toStartOf="@+id/view_group_rating"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/app_name"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorGrey"/>
+
+        <RelativeLayout
+            android:id="@+id/view_group_rating"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="4dip"
+            android:padding="4dip">
+
+          <android.support.v7.widget.AppCompatImageView
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/shape_movie_rating"
+          />
+
+          <com.helix.widget.SolomonTextViewBold
+              android:id="@+id/vote_average"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_centerInParent="true"
+              android:layout_gravity="center"
+              android:background="@drawable/shape_movie_rating"
+              android:gravity="center"
+              android:textColor="@android:color/white"
+              android:textSize="20sp"
+          />
+
+        </RelativeLayout>
+
+      </RelativeLayout>
+
+
+      <com.helix.widget.SolomonTextViewRegular
+          android:id="@+id/review"
+          android:layout_width="match_parent"
+          android:layout_height="76dip"
+          android:layout_marginEnd="20dip"
+          android:layout_marginStart="120dip"
+          android:layout_marginTop="4dip"
+          android:ellipsize="end"
+          android:maxLines="4"
+          android:text="@string/app_name"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          android:textColor="@color/colorGrey"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.2dip"
+        android:layout_marginEnd="12dip"
+        android:layout_marginStart="12dip"
+        android:layout_marginTop="158dip"
+        android:alpha="0.5"
+        android:background="@color/colorGrey"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="174dip"
+        android:orientation="horizontal">
+
+
+      <com.helix.widget.SolomonTextViewRegular
+          android:id="@+id/date"
+          android:layout_width="0dip"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="20dip"
+          android:layout_marginStart="20dip"
+          android:layout_weight="1"
+          android:text="@string/app_name"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          android:textColor="@color/colorGrey"/>
+
+
+      <com.helix.widget.SolomonTextViewRegular
+          android:id="@+id/adult"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="20dip"
+          android:layout_marginEnd="20dip"
+          android:text="@string/app_name"
+          android:textAllCaps="true"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textColor="@color/colorGrey"/>
+
+    </LinearLayout>
+
+  </android.support.v7.widget.CardView>
+
+
+  <android.support.v7.widget.CardView
+      xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      android:layout_width="108dip"
+      android:layout_height="158dip"
+      android:layout_marginBottom="24dip"
+      android:layout_marginStart="20dip"
+      card_view:cardBackgroundColor="@color/colorPrimary"
+      card_view:cardElevation="6dip"
+      card_view:cardPreventCornerOverlap="true">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/poster"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    />
+
+  </android.support.v7.widget.CardView>
+
+</FrameLayout>
