@@ -1,58 +1,70 @@
 package com.helix.data.source;
 
+import android.support.annotation.NonNull;
+import com.helix.data.Credits;
+import com.helix.data.Genre;
+import com.helix.data.Images;
+import com.helix.data.Movie;
+import com.helix.data.MovieDetail;
+import com.helix.data.Upcoming;
 import java.util.List;
 
 public interface MoviesDataSource {
 
-  interface LoadMoviesCallback {
+  interface FetchUpcomingMoviesCallback {
 
-    void onMoviesLoaded(List<Object> transactions);
+    void onMoviesLoaded(Upcoming upcomingMovies, List<Genre> genres);
 
     void onDataNotAvailable();
   }
 
-  interface SaveMoviesCallback {
+  interface FetchMovieDetailCallback {
 
-    void onMoviesSaved();
+    void onMovieLoaded(MovieDetail movieDetail);
 
-    void onMoviesSaveFailed();
+    void onDataNotAvailable();
   }
-}
 
-//  void login(@NonNull LoginCallback callback);
-//
-//  void checkLoginState(@NonNull LoginCallback callback);
-//
-//  void saveLoginState(@NonNull Login login);
-//
-//
-//  void getTransactions(@NonNull LoadTransactionsCallback callback);
-//
-//  void saveTransactions(@NonNull List<Transaction> transactions);
-//
-//  void newTransaction(@NonNull Transaction transaction, SaveTransactionCallback callback);
-//
-//  void getBalance(@NonNull LoadBalanceCallback callback);
-//
-//  void saveBalance(@NonNull Balance balance);
-//
-//  void getCurrencies(@NonNull LoadCurrenciesCallback callback);
-//
-//  void saveCurrencies(@NonNull List<Currency> currencies);
-//
-//  void getPreferredCurrency(@NonNull LoadCurrenciesCallback callback);
-//
-//  void savePreferredCurrency(@NonNull Currency currency);
-//
-//  void isBalanceGreaterThan(@NonNull BalanceAvailabilityCallback callback, double amount);
-//
-//  void refreshTransactions();
-//
-//  void deleteAllTransactions();
-//
-//  void deleteExistingBalance();
-//
-//  void clearSubscriptions();
-//
-//  void logout();
-//}
+  interface FetchMovieBriefCallback {
+
+    void onMovieLoaded(Movie movie);
+
+    void onDataNotAvailable();
+  }
+
+  interface FetchMovieImagesCallback {
+
+    void onImagesLoaded(Images images);
+
+    void onDataNotAvailable();
+  }
+
+  interface FetchMovieCreditsCallback {
+
+    void onCreditsLoaded(Credits credits);
+
+    void onDataNotAvailable();
+  }
+
+  void getUpcomingMovies(@NonNull FetchUpcomingMoviesCallback callback, int page);
+
+  void saveUpcomingMovies(@NonNull Upcoming upcomingMovies);
+
+  void saveUpcomingMovieDetails(@NonNull MovieDetail movie);
+
+  void saveGenres(@NonNull List<Genre> genres);
+
+  void saveCredits(@NonNull Credits credits);
+
+  void getMovieDetail(@NonNull FetchMovieDetailCallback callback, int movieId);
+
+  void getMovieBrief(@NonNull FetchMovieBriefCallback callback, int movieId);
+
+  void getImages(@NonNull FetchMovieImagesCallback callback, int movieId);
+
+  void getCredits(@NonNull FetchMovieCreditsCallback callback, int movieId);
+
+  void refreshMovies();
+
+  void clearSubscriptions();
+}

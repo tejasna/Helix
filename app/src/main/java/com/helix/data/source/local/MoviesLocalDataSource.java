@@ -2,185 +2,169 @@ package com.helix.data.source.local;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import com.helix.data.Credits;
+import com.helix.data.Genre;
+import com.helix.data.Movie;
+import com.helix.data.MovieDetail;
+import com.helix.data.Upcoming;
+import com.helix.data.UpcomingGenreZip;
 import com.helix.data.source.HelixApplicationScope;
 import com.helix.data.source.MoviesDataSource;
+import com.helix.data.source.MoviesRepository;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import java.util.List;
 import javax.inject.Inject;
+import rx.Observable;
+import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 import static com.helix.utils.PreConditions.checkNotNull;
 
 @HelixApplicationScope public class MoviesLocalDataSource implements MoviesDataSource {
 
+  private CompositeSubscription compositeSubscription;
+
   @Inject public MoviesLocalDataSource(@NonNull Context context) {
     checkNotNull(context);
+    compositeSubscription = new CompositeSubscription();
   }
 
-  //@Override public void checkLoginState(@NonNull LoginCallback callback) {
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    Login login = realm.where(Login.class).findFirst();
-  //    if (login == null) {
-  //      callback.onLoginFailure();
-  //    } else {
-  //      callback.userExists();
-  //    }
-  //  });
-  //}
-  //
-  //@Override public void login(@NonNull LoginCallback callback) {
-  //  // Not required because the {@link TransactionsRepository} handles the logic of login locally
-  //}
-  //
-  //@Override public void saveLoginState(@NonNull Login login) {
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    realm.copyToRealmOrUpdate(login);
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override public void clearLoginState() {
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    Login login = realm.where(Login.class).findFirst();
-  //    if (login != null) {
-  //      login.deleteFromRealm();
-  //    }
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override public void getTransactions(@NonNull LoadTransactionsCallback callback) {
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    RealmResults<Transaction> transactions = realm.where(Transaction.class).findAll();
-  //    if (transactions == null || transactions.size() < 1) {
-  //      callback.onDataNotAvailable();
-  //    } else {
-  //      callback.onMoviesLoaded(realm.copyFromRealm(transactions));
-  //    }
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override public void saveTransactions(@NonNull List<Transaction> transactions) {
-  //  checkNotNull(transactions);
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    realm.copyToRealmOrUpdate(transactions);
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override
-  //public void newTransaction(@NonNull Transaction transaction, SaveTransactionCallback callback) {
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    realm.copyToRealmOrUpdate(transaction);
-  //    callback.onMoviesSaved();
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override public void refreshTransactions() {
-  //  // Not required because the {@link TransactionsRepository} handles the logic of refreshing the
-  //  // transactions from all the available data sources.
-  //}
-  //
-  //@Override public void deleteAllTransactions() {
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    RealmResults<Transaction> transactions = realm.where(Transaction.class).findAll();
-  //    if (transactions != null) {
-  //      transactions.deleteAllFromRealm();
-  //    }
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override public void getBalance(@NonNull LoadBalanceCallback callback) {
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    Balance balance = realm.where(Balance.class).findFirst();
-  //    Currency userPrefCurrency = realm.where(Currency.class).equalTo("userPref", true).findFirst();
-  //    if (balance == null) {
-  //      callback.onDataNotAvailable();
-  //    } else {
-  //      callback.onBalanceLoaded(realm.copyFromRealm(balance),
-  //          realm.copyFromRealm(userPrefCurrency));
-  //    }
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override public void saveBalance(@NonNull Balance balance) {
-  //  checkNotNull(balance);
-  //  if(!Realm.getDefaultInstance().isInTransaction())
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    realm.copyToRealmOrUpdate(balance);
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override public void getCurrencies(@NonNull LoadCurrenciesCallback callback) {
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    RealmResults<Currency> currencies = realm.where(Currency.class).findAll();
-  //    if (currencies == null) {
-  //      callback.onDataNotAvailable();
-  //    } else {
-  //      callback.onCurrencyLoaded(realm.copyFromRealm(currencies));
-  //    }
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override public void getPreferredCurrency(@NonNull LoadCurrenciesCallback callback) {
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    RealmResults<Currency> currencies =
-  //        realm.where(Currency.class).equalTo("userPref", true).findAll();
-  //    if (currencies == null) {
-  //      callback.onDataNotAvailable();
-  //    } else {
-  //      callback.onCurrencyLoaded(realm.copyFromRealm(currencies));
-  //    }
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override public void savePreferredCurrency(@NonNull Currency newPreferredCurrency) {
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    Currency preferredCurrency =
-  //        realm.where(Currency.class).equalTo("userPref", true).findFirst();
-  //    if (preferredCurrency != null) {
-  //      preferredCurrency.setUserPref(false);
-  //      newPreferredCurrency.setUserPref(true);
-  //      realm.copyToRealmOrUpdate(preferredCurrency);
-  //      realm.copyToRealmOrUpdate(newPreferredCurrency);
-  //    }
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override
-  //public void isBalanceGreaterThan(@NonNull BalanceAvailabilityCallback callback, double amount) {
-  //  // Not required for the local data source because the {@link WalletRepository} handles
-  //}
-  //
-  //@Override public void saveCurrencies(@NonNull List<Currency> currencies) {
-  //  checkNotNull(currencies);
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    realm.copyToRealmOrUpdate(currencies);
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override public void deleteExistingBalance() {
-  //  Realm.getDefaultInstance().executeTransaction(realm -> {
-  //    Balance balance = realm.where(Balance.class).findFirst();
-  //    if (balance != null) {
-  //      balance.deleteFromRealm();
-  //    }
-  //    realm.close();
-  //  });
-  //}
-  //
-  //@Override public void clearSubscriptions() {
-  //  // Not required for the local data source because the {@link WalletRepository} handles
-  //  // clearing the composite disposable
-  //}
-  //
-  //@Override public void logout() {
-  //
-  //}
+  @Override public void getUpcomingMovies(@NonNull FetchUpcomingMoviesCallback callback, int page) {
+
+    Upcoming upcomingCache =
+        Realm.getDefaultInstance().where(Upcoming.class).equalTo("page", page).findFirst();
+    RealmResults<Genre> genreCache = Realm.getDefaultInstance().where(Genre.class).findAll();
+
+    if (upcomingCache == null || genreCache == null) {
+      callback.onDataNotAvailable();
+      return;
+    }
+
+    Observable<Upcoming> upcoming = upcomingCache.asObservable();
+    Observable<RealmResults<Genre>> genres = genreCache.asObservable();
+
+    compositeSubscription.add(
+        Observable.zip(upcoming, genres, UpcomingGenreZip::new).doOnError(throwable -> {
+          Timber.e(throwable.getMessage());
+          callback.onDataNotAvailable();
+        }).onErrorResumeNext(throwable -> {
+          return Observable.empty();
+        }).subscribe(upcomingGenreZip -> {
+          callback.onMoviesLoaded(upcomingGenreZip.getUpcoming(), upcomingGenreZip.getGenres());
+        }));
+  }
+
+  @Override public void getMovieDetail(@NonNull FetchMovieDetailCallback callback, int movieId) {
+
+    MovieDetail movieDetailCache =
+        Realm.getDefaultInstance().where(MovieDetail.class).equalTo("id", movieId).findFirst();
+
+    if (movieDetailCache == null) {
+      callback.onDataNotAvailable();
+      return;
+    }
+
+    Observable<MovieDetail> movie = movieDetailCache.asObservable();
+
+    compositeSubscription.add(movie.doOnError(throwable -> {
+      Timber.e(throwable.getMessage());
+      callback.onDataNotAvailable();
+    }).onErrorResumeNext(throwable -> {
+      return Observable.empty();
+    }).subscribe(callback::onMovieLoaded));
+  }
+
+  @Override public void getMovieBrief(@NonNull FetchMovieBriefCallback callback, int movieId) {
+
+    Movie movieCache =
+        Realm.getDefaultInstance().where(Movie.class).equalTo("id", movieId).findFirst();
+
+    if (movieCache == null) {
+      callback.onDataNotAvailable();
+      return;
+    }
+
+    Observable<Movie> movie = movieCache.asObservable();
+
+    compositeSubscription.add(movie.doOnError(throwable -> {
+      Timber.e(throwable.getMessage());
+      callback.onDataNotAvailable();
+    }).onErrorResumeNext(throwable -> {
+      return Observable.empty();
+    }).subscribe(callback::onMovieLoaded));
+  }
+
+  @Override public void getCredits(@NonNull FetchMovieCreditsCallback callback, int movieId) {
+
+    Credits credits =
+        Realm.getDefaultInstance().where(Credits.class).equalTo("id", movieId).findFirst();
+
+    if (credits == null) {
+      callback.onDataNotAvailable();
+      return;
+    }
+
+    Observable<Credits> credit = credits.asObservable();
+
+    compositeSubscription.add(credit.doOnError(throwable -> {
+      Timber.e(throwable.getMessage());
+      callback.onDataNotAvailable();
+    }).onErrorResumeNext(throwable -> {
+      return Observable.empty();
+    }).subscribe(callback::onCreditsLoaded));
+  }
+
+  @Override public void saveUpcomingMovies(@NonNull Upcoming upcomingMovies) {
+    checkNotNull(upcomingMovies);
+    Realm.getDefaultInstance().executeTransactionAsync(realm -> {
+      realm.copyToRealmOrUpdate(upcomingMovies);
+      realm.commitTransaction();
+      realm.close();
+    });
+  }
+
+  @Override public void saveUpcomingMovieDetails(@NonNull MovieDetail movie) {
+    checkNotNull(movie);
+    Realm.getDefaultInstance().executeTransactionAsync(realm -> {
+      realm.copyToRealmOrUpdate(movie);
+      realm.commitTransaction();
+      realm.close();
+    });
+  }
+
+  @Override public void saveGenres(@NonNull List<Genre> genres) {
+    checkNotNull(genres);
+    Realm.getDefaultInstance().executeTransactionAsync(realm -> {
+      realm.copyToRealmOrUpdate(genres);
+      realm.commitTransaction();
+      realm.close();
+    });
+  }
+
+  @Override public void saveCredits(@NonNull Credits credits) {
+    checkNotNull(credits);
+    Realm.getDefaultInstance().executeTransactionAsync(realm -> {
+      realm.copyToRealmOrUpdate(credits);
+      realm.commitTransaction();
+      realm.close();
+    });
+  }
+
+  @Override public void refreshMovies() {
+    /**
+     Not required because the {@link MoviesRepository} handles the logic of refreshing the movies
+     from all the available data sources.
+     */
+  }
+
+  @Override public void getImages(@NonNull FetchMovieImagesCallback callback, int movieId) {
+    /**
+     Not required because the {@link MoviesRepository} does not cache images in memory or in DB.
+     */
+  }
+
+  @Override public void clearSubscriptions() {
+    compositeSubscription.clear();
+  }
 }

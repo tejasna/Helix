@@ -6,7 +6,7 @@ import com.helix.data.source.remote.MoviesRemoteDataSource;
 import dagger.Module;
 import dagger.Provides;
 
-@Module public class MoviesRepositoryModule {
+@Module(includes = NetworkModule.class) class MoviesRepositoryModule {
 
   @HelixApplicationScope @Provides @Local MoviesDataSource provideMoviesLocalDataSource(
       Context context) {

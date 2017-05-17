@@ -8,7 +8,7 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 
-@Module(includes = { ContextModule.class, NetworkModule.class }) public class PicassoModule {
+@Module(includes = { ContextModule.class, NetworkModule.class }) class PicassoModule {
 
   @Provides @HelixApplicationScope Picasso picasso(Context context,
       OkHttp3Downloader okHttp3Downloader) {

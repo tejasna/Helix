@@ -1,3 +1,21 @@
 <resources>
   <string name="app_name">Helix</string>
+  <string name="upcoming">Upcoming</string>
+  <string name="upcoming_empty">No movies found</string>
+  <string name="upcoming_error">Could not retrieve movies</string>
+  <string name="movie_detail_error">Could not retrieve info</string>
+  <string name="movie_detail_images_error">Could not retrieve images</string>
+  <string name="movie_detail_credits_error">Could not retrieve credits</string>
+  <string name="movie_detail_empty">No info found</string>
+  <string name="shared_poster_element">Movie poster</string>
+  <string name="exception_no_view_type_found">No view type found</string>
+  <string name="movie_detail_genre">Genre</string>
+  <string name="movie_detail_release_date_txt">Release date</string>
+  <string name="movie_detail_runtime_txt">Runtime</string>
+  <string name="movie_detail_vote_txt">Vote</string>
+  <string name="movie_detail_revenue_txt">Revenue</string>
+  <string name="movie_detail_cast_credits">Cast</string>
+  <string name="movie_detail_runtime">%1$s min</string>
+  <string name="movie_detail_director_header">Director</string>
+
 </resources>
