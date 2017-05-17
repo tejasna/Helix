@@ -155,6 +155,7 @@
 
   <android.support.v7.widget.CardView
       xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/poster_card"
       android:layout_width="108dip"
       android:layout_height="158dip"
       android:layout_marginBottom="24dip"
@@ -167,6 +168,7 @@
         android:id="@+id/poster"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:transitionName="@string/shared_poster_element"
     />
 
   </android.support.v7.widget.CardView>

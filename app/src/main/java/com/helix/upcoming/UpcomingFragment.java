@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.helix.R;
 import com.helix.data.Genre;
 import com.helix.data.Movie;
 import com.helix.utils.ActivityUtils;
+import com.helix.utils.ClickDelegate;
 import com.helix.utils.DateUtil;
 import com.helix.widget.EndlessRecyclerViewScrollListener;
 import com.helix.widget.RoundedCornersTransformation;
@@ -40,6 +42,8 @@ public class UpcomingFragment extends Fragment implements UpcomingContract.View 
 
   private UpcomingAdapter recyclerAdapter;
 
+  private static ClickDelegate clickDelegate;
+
   @BindView(R.id.recycler_view) RecyclerView recyclerView;
 
   @BindView(R.id.refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
@@ -47,7 +51,8 @@ public class UpcomingFragment extends Fragment implements UpcomingContract.View 
   public UpcomingFragment() {
   }
 
-  public static UpcomingFragment newInstance() {
+  public static UpcomingFragment newInstance(ClickDelegate delegate) {
+    clickDelegate = delegate;
     return new UpcomingFragment();
   }
 
@@ -64,23 +69,24 @@ public class UpcomingFragment extends Fragment implements UpcomingContract.View 
 
     unbinder = ButterKnife.bind(this, rootView);
 
-    swipeRefreshLayout.setOnRefreshListener(() -> presenter.loadMovies(true));
-
     LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
     recyclerView.setLayoutManager(layoutManager);
 
+    swipeRefreshLayout.setEnabled(false);
+
     EndlessRecyclerViewScrollListener scrollListener =
         new EndlessRecyclerViewScrollListener(layoutManager) {
-
-          @Override public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-            loadMore(page + 1);
+          @Override public void onLoadMore(int newPage, int totalItemsCount, RecyclerView view) {
+            loadMore(newPage + 1);
           }
         };
 
     recyclerView.addOnScrollListener(scrollListener);
 
     recyclerView.setAdapter(recyclerAdapter);
+
+    presenter.start();
 
     return rootView;
   }
@@ -91,11 +97,6 @@ public class UpcomingFragment extends Fragment implements UpcomingContract.View 
 
   @Override public void setPresenter(UpcomingContract.Presenter presenter) {
     this.presenter = checkNotNull(presenter);
-  }
-
-  @Override public void onStart() {
-    super.onStart();
-    presenter.start();
   }
 
   @Override public void onDestroy() {
@@ -218,7 +219,7 @@ public class UpcomingFragment extends Fragment implements UpcomingContract.View 
       }
     }
 
-    private class VHMovie extends RecyclerView.ViewHolder {
+    private class VHMovie extends RecyclerView.ViewHolder implements View.OnClickListener {
 
       View itemView;
       AppCompatImageView poster;
@@ -228,6 +229,7 @@ public class UpcomingFragment extends Fragment implements UpcomingContract.View 
       AppCompatTextView review;
       AppCompatTextView adult;
       AppCompatTextView voteAverage;
+      CardView cardView;
 
       VHMovie(View itemView) {
         super(itemView);
@@ -239,6 +241,14 @@ public class UpcomingFragment extends Fragment implements UpcomingContract.View 
         this.review = (AppCompatTextView) itemView.findViewById(R.id.review);
         this.adult = (AppCompatTextView) itemView.findViewById(R.id.adult);
         this.voteAverage = (AppCompatTextView) itemView.findViewById(R.id.vote_average);
+        this.cardView = (CardView) itemView.findViewById(R.id.poster_card);
+        itemView.setOnClickListener(this);
+      }
+
+      @Override public void onClick(View view) {
+
+        clickDelegate.clicked(movies.get(getAdapterPosition() - 1).getId(),
+            movies.get(getAdapterPosition() - 1).getPosterUrl(), cardView);
       }
     }
 

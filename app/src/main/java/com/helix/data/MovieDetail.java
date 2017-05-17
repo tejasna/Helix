@@ -6,16 +6,17 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
+import java.text.DecimalFormat;
 
 @RealmClass public class MovieDetail extends RealmObject {
 
+  @PrimaryKey @SerializedName("id") @Expose public int id;
   @SerializedName("adult") @Expose public Boolean adult;
   @SerializedName("backdrop_path") @Expose public String backdropPath;
   @SerializedName("belongs_to_collection") @Expose public BelongsToCollection belongsToCollection;
   @SerializedName("budget") @Expose public Integer budget;
   @SerializedName("genres") @Expose public RealmList<Genre> genres;
   @SerializedName("homepage") @Expose public String homepage;
-  @PrimaryKey @SerializedName("id") @Expose public int id;
   @SerializedName("imdb_id") @Expose public String imdbId;
   @SerializedName("original_language") @Expose public String originalLanguage;
   @SerializedName("original_title") @Expose public String originalTitle;
@@ -175,6 +176,11 @@ import io.realm.annotations.RealmClass;
 
   public int getRevenue() {
     return revenue;
+  }
+
+  public String getFormatedRevenue() {
+    DecimalFormat formatter = new DecimalFormat("#,###");
+    return formatter.format(this.revenue) + " USD";
   }
 
   public void setRevenue(int revenue) {

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal">
+
+
+  <android.support.v7.widget.CardView
+      xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/img_card"
+      android:layout_width="62dip"
+      android:layout_height="90dip"
+      android:layout_marginBottom="24dip"
+      android:layout_marginStart="20dip"
+      card_view:cardBackgroundColor="@color/colorPrimary"
+      card_view:cardElevation="6dip"
+      card_view:cardPreventCornerOverlap="true">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/img_cast"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionName="@string/shared_poster_element"
+    />
+
+  </android.support.v7.widget.CardView>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+    <com.helix.widget.SolomonTextViewRegular
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dip"
+        android:layout_marginStart="20dip"
+        android:text="@string/app_name"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/colorGrey"/>
+
+    <com.helix.widget.SolomonTextViewRegular
+        android:id="@+id/aka"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dip"
+        android:layout_marginStart="20dip"
+        android:layout_marginTop="4dip"
+        android:text="@string/app_name"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/colorGrey"/>
+
+
+  </LinearLayout>
+
+</LinearLayout>

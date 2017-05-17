@@ -3,17 +3,19 @@ package com.helix.data.source.remote;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import com.helix.HelixApplication;
-import com.helix.data.Movie;
+import com.helix.data.Credits;
+import com.helix.data.Genre;
+import com.helix.data.Genres;
 import com.helix.data.MovieDetail;
 import com.helix.data.Upcoming;
+import com.helix.data.UpcomingGenreZip;
 import com.helix.data.source.HelixApplicationScope;
 import com.helix.data.source.MoviesDataSource;
 import com.helix.data.source.MoviesRepository;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import java.util.ArrayList;
 import java.util.List;
 import timber.log.Timber;
 
@@ -30,6 +32,8 @@ import static io.reactivex.Observable.empty;
 
   private static final String API_KEY = "b7cd3340a794e5a2f35e3abb820b497f";
 
+  private Genres cachedGenres;
+
   public MoviesRemoteDataSource(@NonNull Context context) {
     checkNotNull(context);
     this.context = context;
@@ -37,10 +41,37 @@ import static io.reactivex.Observable.empty;
     compositeSubscription = new CompositeDisposable();
   }
 
-  @SuppressWarnings("NullableProblems") @Override
-  public void getUpcomingMovies(@NonNull FetchUpcomingMoviesCallback callback, @NonNull int page) {
+  @Override public void getUpcomingMovies(@NonNull FetchUpcomingMoviesCallback callback, int page) {
 
-    Upcoming upcomingMovies = new Upcoming();
+    Observable<Genres> genres;
+    if (cachedGenres == null) {
+      cachedGenres = new Genres();
+      genres = restApi.getMovieGenres(API_KEY);
+    } else {
+      genres = Observable.just(cachedGenres);
+    }
+
+    Observable<Upcoming> movies = restApi.getUpcomingMovies(API_KEY, page);
+
+    compositeSubscription.add(Observable.zip(movies, genres,
+        (upcoming, genres1) -> new UpcomingGenreZip(upcoming, genres1.getGenres()))
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnError(throwable -> {
+          Timber.e(throwable.getMessage());
+          callback.onDataNotAvailable();
+        })
+        .onErrorResumeNext(throwable -> {
+          callback.onDataNotAvailable();
+          return empty();
+        })
+        .subscribe(upcomingGenreZip -> {
+          cachedGenres.setGenres(upcomingGenreZip.getGenres());
+          Timber.d(cachedGenres.getGenres().size() + "");
+          callback.onMoviesLoaded(upcomingGenreZip.getUpcoming(), upcomingGenreZip.getGenres());
+        }));
+
+    /*Upcoming upcomingMovies = new Upcoming();
     List<MovieDetail> upcomingMovieDetailList = new ArrayList<>();
 
     compositeSubscription.add(restApi.getUpcomingMovies(API_KEY, page)
@@ -76,15 +107,85 @@ import static io.reactivex.Observable.empty;
             callback.onMoviesLoaded(upcomingMovies, upcomingMovieDetailList);
           }
         })
-        .subscribe());
+        .subscribe());*/
+  }
+
+  @Override public void getMovieDetail(@NonNull FetchMovieDetailCallback callback, int movieId) {
+
+    compositeSubscription.add(restApi.getMovieDetail(movieId, API_KEY)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnError(throwable -> {
+          Timber.e(throwable.getMessage());
+          callback.onDataNotAvailable();
+        })
+        .onErrorResumeNext(throwable -> {
+          callback.onDataNotAvailable();
+          return empty();
+        })
+        .subscribe(callback::onMovieLoaded));
+  }
+
+  @Override public void getMovieBrief(@NonNull FetchMovieBriefCallback callback, int movieId) {
+    callback.onDataNotAvailable();
+  }
+
+  @Override public void getImages(@NonNull FetchMovieImagesCallback callback, int movieId) {
+    compositeSubscription.add(restApi.getMovieImages(movieId, API_KEY)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnError(throwable -> {
+          Timber.e(throwable.getMessage());
+          callback.onDataNotAvailable();
+        })
+        .onErrorResumeNext(throwable -> {
+          callback.onDataNotAvailable();
+          return empty();
+        })
+        .subscribe(callback::onImagesLoaded));
+  }
+
+  @Override public void getCredits(@NonNull FetchMovieCreditsCallback callback, int movieId) {
+    compositeSubscription.add(restApi.getMovieCredits(movieId, API_KEY)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnError(throwable -> {
+          Timber.e(throwable.getMessage());
+          callback.onDataNotAvailable();
+        })
+        .onErrorResumeNext(throwable -> {
+          callback.onDataNotAvailable();
+          return empty();
+        })
+        .subscribe(callback::onCreditsLoaded));
   }
 
   @Override public void saveUpcomingMovies(@NonNull Upcoming upcomingMovies) {
-
+    /**
+     Not required because the {@link MoviesRepository} handles the logic of saving movies
+     from all the available data sources.
+     */
   }
 
-  @Override public void saveUpcomingMovieDetails(@NonNull List<MovieDetail> upcomingMovieDetail) {
+  @Override public void saveUpcomingMovieDetails(@NonNull MovieDetail movie) {
+    /**
+     Not required because the {@link MoviesRepository} handles the logic of saving movie detail
+     from all the available data sources.
+     */
+  }
 
+  @Override public void saveGenres(@NonNull List<Genre> genres) {
+    /**
+     Not required because the {@link MoviesRepository} handles the logic of saving genres
+     from all the available data sources.
+     */
+  }
+
+  @Override public void saveCredits(@NonNull Credits credits) {
+    /**
+     Not required because the {@link MoviesRepository} handles the logic of saving credits
+     from all the available data sources.
+     */
   }
 
   @Override public void refreshMovies() {

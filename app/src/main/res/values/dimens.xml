@@ -6,4 +6,5 @@
   <dimen name="fab_margin">16dip</dimen>
   <dimen name="status_bar_margin">24dip</dimen>
   <dimen name="navigation_bar_margin">64dip</dimen>
+  <dimen name="card_margin">16dp</dimen>
 </resources>
